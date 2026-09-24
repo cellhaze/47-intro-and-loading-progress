@@ -6,21 +6,31 @@ import { gsap } from 'gsap'
 /**
  * Loaders
  */
+
+const loadingBarEl = document.querySelector('.loading-bar')
 //Adding a loading manager
 const loadingManager = new THREE.LoadingManager(
     // Loaded
     () =>
     {
-        // test
-        // console.log('loaded')
-        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 })
+        window.setTimeout(() =>
+        {
+            // test
+            // console.log('loaded')
+            gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0, delay: 1 })
+            loadingBarEl.classList.add('ended')
+            loadingBarEl.style.transform = ''
+        }, 500)
     },
 
     // Progress
-    () =>
+    // For see the loading progress
+    // Will be triggered each time an asset is added
+    (itemUrl, itemsLoaded, itemsTotal) =>
     {
-        // test
-        console.log('progress')
+        const progressRatio = itemsLoaded / itemsTotal
+        // console.log(progressRatio)
+        loadingBarEl.style.transform = `scaleX(${progressRatio})`
     }
 )
 
